@@ -11,17 +11,15 @@ public class WorkerThread implements Runnable {
 		this.A = A;
 		this.B = B;
 		this.B = B;
+		this.C = C;
 	}
 
-	public WorkerThread(){
-	}
-	
 	public void run() {
-		System.out.println("Hello from a thread!");
+		// Initialize the current cell in C
 		C[row][col] = 0;
-		/* add your calculations for C[row][col] here */
-		for (int i = 0; i < B.length; i++) {
-			C[row][col] += A[row][i] + B[i][col]; 
-		}
+
+		// Calculate C[row][col]
+		for (int i = 0; i < B.length; i++)
+			C[row][col] += A[row][i] * B[i][col];
 	}
 }
