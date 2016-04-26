@@ -1,5 +1,5 @@
 /**
- * @author Tal Danai <ID> Barr Inbar <ID>
+ * @author Tal Danay <203626312> Barr Inbar <ID>
  * @since May 2016  
  * 
  * HW2 in OS course @ Afeka College for Dr. Barak Shenhav
@@ -31,47 +31,95 @@ public class Main {
 		// Check there are enough arguments for running
 		if(args.length < 3)
 			System.out.println("Please run with 3 file names for each matrix A, B and C");
-		else {
-			
+		else 
+		{
 			// Try to read each of the matrices
 			if (!readMatrix(A, args[0]))
 				System.out.println("Ilegal input in file A");
-			if (!readMatrix(B, args[1]))
-				System.out.println("Ilegal input in file B");
-			
-			// Assign C in the proper size
-			C = new int[A.length][B[0].length];
-			
-			// Make sure matrix size are OK
-			if (A[0].length != B.length)
-				System.out.println("Columns of A must comply with rows of  B");
-			else
+			else 
 			{
-				// For each element in C
-				for (int row = 0; row < C.length; row++)
+				if (!readMatrix(B, args[1]))
+					System.out.println("Ilegal input in file B");
+				else 
 				{
-					for (int col = 0; col < C[0].length; col++)
+					// Assign C in the proper size
+					C = new int[A.length][B[0].length];
+					
+					// Make sure matrix size are OK
+					if (A[0].length != B.length)
+						System.out.println("Columns of A must comply with rows of  B");
+					else
 					{
-						// Create a new thread for calculating the cell in C
-						(new Thread(tg, new WorkerThread(row, col,A, B, C))).start();
+						// For each element in C
+						for (int row = 0; row < C.length; row++)
+						{
+							for (int col = 0; col < C[0].length; col++)
+							{
+								// Create a new thread for calculating the cell in C
+								(new Thread(tg, new WorkerThread(row, col,A, B, C))).start();
+							}
+						}
+						// Wait for all threads to finish
+						while(tg.activeCount() > 0);
+						
+						writeMatrix(C, args[2]);
 					}
 				}
-				
-				// Wait for all threads to finish
-				while(tg.activeCount() > 0);
-				
-				writeMatrix(C, args[2]);
 			}
 		}		
 	}
 	
 	private static boolean readMatrix(int[][] Matrix, String strFileName) {
-		// TODO: Implement reading from file
+		Scanner in;
+		try 
+		{
+			in = new Scanner(new File(strFileName));
+		}
+		catch (FileNotFoundException e1) {return false;}	
+		try 
+		{ 
+			// Read matrix dimensions
+			Matrix = new int[in.nextInt()][in.nextInt()];
+			in.nextLine();
+			// Read matrix values
+			for (int i=0; i<Matrix.length; i++) 
+			{
+				for (int j=0; j<Matrix[i].length; j++) 
+				{
+					if (!in.hasNext()) return false;
+					Matrix[i][j] = in.nextInt();
+				}
+				if (in.hasNextLine()) in.nextLine(); // Clear \n from buffer
+			}
+		}
+		catch (InputMismatchException e) {return false;}
+		catch (IllegalArgumentException e) {return false;}
+		finally 
+		{
+			in.close();
+		}
 		return true;
 	}
 	
 	private static boolean writeMatrix(int[][] Matrix, String strFileName) {
-		// TODO: Implement writing to file
+		PrintWriter pw;
+		try 
+		{
+			pw = new PrintWriter(new File(strFileName));		
+		}
+		catch (FileNotFoundException e) {return false;}
+		// Write matrix dimensions
+		pw.println(Matrix.length+" "+Matrix[0].length);
+		// Write matrix values
+		for (int i=0; i<Matrix.length; i++) 
+		{
+			for (int j=0; j<Matrix[0].length; j++) 
+			{
+				pw.print(Matrix[i][j]+" "); 
+			}
+			pw.println(); 
+		}
+		pw.close();
 		return true;
 	}
 }
