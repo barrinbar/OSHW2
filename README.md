@@ -17,7 +17,7 @@ Run using Java 8 or higher. Give 3 args:
 
 ## Authors
 
-* **Tal Danai** - *Initial work*
+* **Tal Danay** - *Initial work*
 * **Barr Inbar** - *Initial work*
 
 
