@@ -79,8 +79,6 @@ public class Main {
 	 * it reads the elements of the matrix line by line and populates the
 	 * matrix.
 	 * 
-	 * @param Matrix
-	 *            The matrix to read.
 	 * @param strFileName
 	 *            The path of the input file.
 	 * @return <code>int[][]</code> The read matrix (if an exception is caught
